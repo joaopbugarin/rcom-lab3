@@ -1,6 +1,11 @@
 {
     "files.associations": {
         "stat.h": "c",
-        "datalink.h": "c"
-    }
+        "datalink.h": "c",
+        "statemachine.h": "c",
+        "string.h": "c",
+        "assert.h": "c",
+        "stdlib.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "enabled"
 }

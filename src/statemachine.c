@@ -1,5 +1,7 @@
-#include "statemachine.h"
-#include <stdlib.h>
+#include "utils/statemachine.h"
+
+State state;
+volatile int STOP = FALSE;
 
 char compute_bcc(char a, char c) {
     return a ^ c;
@@ -15,7 +17,7 @@ void parse_frame(int fd, char c) {
             }
             break;
         case FLAG_RCV:
-            if (c == A_RECEIVER_COMMAND) {
+            if (c == A_RECEIVER_SENDER) {
                 state = A_RCV;
             } else if (c != FLAG) {
                 state = START;
@@ -29,7 +31,7 @@ void parse_frame(int fd, char c) {
             }
             break;
         case C_RCV:
-            if (compute_bcc(A_RECEIVER_COMMAND, C_SET) == c) {
+            if (compute_bcc(A_RECEIVER_SENDER, C_SET) == c) {
                 state = BCC_OK;
             } else {
                 state = START;
@@ -62,6 +64,7 @@ void parse_frame(int fd, char c) {
             state = DATA_RCV;
             break;
         case STOP_STATE:
+            STOP = TRUE;
             state = START;
             break;
     }

@@ -1,11 +1,14 @@
 #include "datalink.h"
+#include <stdio.h>
+#include <string.h>
+
 
 void build_frame(int fd, char* buf, int size) {
-    unsigned char frame[300]; // Assuming maximum frame size is 255 bytes before stuffing. Additional bytes to accomodate extra stuffing.
+    unsigned char frame[255]; // Assuming maximum frame size is 255 bytes before stuffing. Additional bytes to accomodate extra stuffing.
     memset(frame, 0, sizeof(frame));
 
     frame[0] = FLAG;
-    frame[1] = A_TRANSMITTER_COMMAND;
+    frame[1] = A_RECEIVER_SENDER;
     frame[2] = C_SET;
     frame[3] = frame[1] ^ frame[2];
 

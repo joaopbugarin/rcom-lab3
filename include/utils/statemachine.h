@@ -1,14 +1,21 @@
 #ifndef STATEMACHINE_H
 #define STATEMACHINE_H
 
+#include <unistd.h>
+
 #define FALSE 0
 #define TRUE 1
 #define FLAG 0x5C
 #define ESCAPE 0x5D
-#define A_RECEIVER_COMMAND 0x03
+#define A_SENDER_RECEIVER 0x01
+#define A_RECEIVER_SENDER 0x03
 #define C_SET 0x03
+#define C_UA 0x06
 
-enum {
+
+extern volatile int STOP;
+
+typedef enum {
     START,
     FLAG_RCV,
     A_RCV,
@@ -17,7 +24,7 @@ enum {
     STOP_STATE,
     DATA_RCV,
     ESCAPE_RCV
-} state;
+} State;
 
 /**
  * @function char compute_bcc(char a, char c)

@@ -60,7 +60,9 @@ void parse_frame(int fd, char c) {
             }
             break;
         case ESCAPE_RCV:
-            buf[i++] = c ^ 0x20;
+            if (c == (FLAG ^ 0x20) || c == (ESCAPE ^ 0x20)) {
+                buf[i++] = c ^ 0x20;
+            }
             state = DATA_RCV;
             break;
         case STOP_STATE:

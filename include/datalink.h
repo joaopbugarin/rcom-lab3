@@ -7,6 +7,14 @@
 #define _POSIX_SOURCE 1 /* POSIX compliant source */
 
 
-void build_frame(int fd, char* buf, int size);
+unsigned char* perform_byte_stuffing(unsigned char* data_array, int* data_size);
+unsigned char* perform_byte_destuffing(unsigned char* data_array, int* data_size);
+void build_frame(int fd, unsigned char* buf, int size);
+unsigned char* read_frame(int fd, int* size);
+void get_file(int fd, const char* output_filename);
+void send_file(int fd, const char* filename);
+void serial_open(const char* port, int* fd);
+int serial_close(int fd);
+
 
 #endif // DATALINK_H

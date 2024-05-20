@@ -15,10 +15,14 @@
 #define BAUDRATE B38400
 #define CHUNK_SIZE 1024
 
-void build_frame(int fd, unsigned char* buf, int size) {
+void build_frame(int fd, unsigned char* buf, int size, char type) {
     unsigned char frame[5 + size];
     frame[0] = FLAG;
-    frame[1] = A_RECEIVER_SENDER;
+    if (strcmp(type, "Tx") == 0) {
+        frame[1] = A_RECEIVER_SENDER;
+    } else if (strcmp(type, "Rx") == 0) {
+        frame[1] = A_SENDER_RECEIVER;
+    };
     frame[2] = C_SET;
     frame[3] = frame[1] ^ frame[2];
     memcpy(&frame[4], buf, size);
@@ -142,48 +146,3 @@ void get_file(int fd, const char* output_filename) {
     // Close the output file.
     fclose(file);
 }
-
-void serial_open(const char* port, int* fd){
-    struct termios oldtio,newtio;
-    *fd = open(port, O_RDWR | O_NOCTTY );
-
-	if (*fd <0) {perror(port); exit(-1); }
-
-    if ( tcgetattr(fd,&oldtio) == -1) { /* save current port settings */
-        perror("tcgetattr");
-        exit(-1);
-    }
-
-    bzero(&newtio, sizeof(newtio));
-    newtio.c_cflag = BAUDRATE | CS8 | CLOCAL | CREAD;
-    newtio.c_iflag = IGNPAR;
-    newtio.c_oflag = 0;
-
-    /* set input mode (non-canonical, no echo,...) */
-    newtio.c_lflag = 0;
-
-    newtio.c_cc[VTIME]    = 0;   /* inter-character timer unused */
-    newtio.c_cc[VMIN]     = 5;   /* blocking read until 5 chars received */
-
-    tcflush(fd, TCIOFLUSH);
-
-    if (tcsetattr(fd,TCSANOW,&newtio) == -1) {
-        perror("tcsetattr");
-        exit(-1);
-    }
-
-    printf("New termios structure set\n");
-
-}
-
-
-int serial_close (int fd){
-    struct termios oldtio;
-	if ( tcsetattr(fd,TCSANOW,&oldtio) == -1) {
-        perror("tcsetattr");
-        exit(-1);
-    }
-    close(fd);
-    return 0;
-}
-

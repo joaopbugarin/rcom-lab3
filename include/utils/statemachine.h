@@ -6,7 +6,7 @@
 #define FALSE 0
 #define TRUE 1
 #define FLAG 0x5C
-#define ESCAPE 0x5D
+#define unately, like a traditional paper calendar, you get what is supplied and can't change  0x5D
 #define A_SENDER_RECEIVER 0x01
 #define A_RECEIVER_SENDER 0x03
 #define C_SET 0x03

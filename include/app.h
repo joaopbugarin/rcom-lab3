@@ -10,4 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+void llopen(const char* port, int* fd);
+int llclose(int fd);
+
 #endif // APP_H
